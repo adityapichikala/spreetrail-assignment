@@ -146,6 +146,73 @@ This document provides instructions for deploying the Shared Expense Management 
 
 #### Vercel (for Frontend - see frontend deployment)
 
+#### Render.com (Backend Deployment)
+
+1. **Prepare Repository:**
+   - Ensure your repository is connected to your Render account
+   - The `start` command in package.json should work for Render
+   - No additional configuration files are needed for basic deployment
+
+2. **Deploy to Render:**
+   - Log in to Render.com and click "New +"
+   - Select "Web Service"
+   - Connect your GitHub repository
+   - Configure the service:
+     - Name: shared-expense-management-backend
+     - Region: Choose your preferred region
+     - Branch: main (or your production branch)
+     - Build Command: `npm install`
+     - Start Command: `npm start`
+   - Under "Environment", add the following variables:
+     - PORT: 10000 (Render automatically sets PORT, but we'll use this for consistency)
+     - NODE_ENV: production
+     - DATABASE_URL: [Your Railway PostgreSQL URL]
+     - JWT_SECRET: [Your secure JWT secret]
+     - MAX_FILE_SIZE: 10485760
+     - UPLOAD_DIR: ./uploads
+   - Click "Create Web Service"
+
+3. **Post-Deployment Steps:**
+   - Once deployed, Render will provide a URL (e.g., https://shared-expense-management-backend.onrender.com)
+   - Run migrations manually if needed (you can use Render's SSH feature or run locally):
+     ```bash
+     npx prisma migrate deploy
+     ```
+   - Set up health checks in Render to monitor your service
+
+**Alternative: Using render.yaml**
+For more explicit control, you can create a `render.yaml` file in your repository root:
+
+```yaml
+services:
+  - type: web
+    name: shared-expense-management
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: expense-manager-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MAX_FILE_SIZE
+        value: 10485760
+      - key: UPLOAD_DIR
+        value: ./uploads
+    disk:
+      name: uploads
+      mountPath: /app/uploads
+      sizeGB: 1
+```
+
+Then connect this yaml file to Render for deployment.
+
 Note: This backend is designed to work with a frontend deployed separately (e.g., on Vercel).
 
 ### Environment Variables
