@@ -1,0 +1,42 @@
+{
+  "name": "shared-expense-management",
+  "version": "1.0.0",
+  "description": "A shared expense management application with multi-currency support, membership tracking, and robust import system",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "build": "echo 'No build step required'",
+    "test": "jest",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "keywords": [
+    "expense",
+    "split",
+    "group",
+    "settlement",
+    "multi-currency"
+  ],
+  "author": "Shared Expense Management Team",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.10.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "prisma": "^5.0.0",
+    "supertest": "^6.3.3"
+  }
+}
